@@ -1,0 +1,189 @@
+{
+  "project": {
+    "name": "Flow2API",
+    "version": "1.0.0",
+    "generated": "2025-12-10T02:28:15.781424",
+    "description": "OpenAI-compatible API service for Google Flow (Labs) AI content generation"
+  },
+  "structure": {
+    "directories": [
+      ".beads",
+      ".claude",
+      ".serena",
+      "config",
+      "docs",
+      "scripts",
+      "src",
+      "static",
+      ".serena\\cache",
+      ".serena\\memories",
+      ".serena\\cache\\python",
+      "src\\api",
+      "src\\core",
+      "src\\services"
+    ],
+    "files": {
+      "total": [
+        ".dockerignore",
+        "docker-compose.proxy.yml",
+        "docker-compose.yml",
+        "Dockerfile",
+        "DOCUMENTATION.md",
+        "LICENSE",
+        "main.py",
+        "PROJECT_INDEX.json",
+        "PROJECT_INDEX.md",
+        "README.md",
+        "requirements.txt",
+        ".beads\\beads.db",
+        ".beads\\config.yaml",
+        ".beads\\metadata.json",
+        ".beads\\README.md",
+        ".claude\\settings.local.json",
+        ".serena\\project.yml",
+        "config\\setting.toml",
+        "config\\setting_warp.toml",
+        "docs\\API.md",
+        "docs\\ARCHITECTURE.md",
+        "docs\\CONFIGURATION.md",
+        "docs\\DEPLOYMENT.md",
+        "docs\\DEVELOPMENT.md",
+        "docs\\PROJECT_OVERVIEW.md",
+        "docs\\README.md",
+        "docs\\SETUP.md",
+        "docs\\TROUBLESHOOTING.md",
+        "scripts\\update_index.py",
+        "src\\main.py",
+        "src\\api\\admin.py",
+        "src\\api\\routes.py",
+        "src\\api\\__init__.py",
+        "src\\core\\auth.py",
+        "src\\core\\config.py",
+        "src\\core\\database.py",
+        "src\\core\\logger.py",
+        "src\\core\\models.py",
+        "src\\core\\__init__.py",
+        "src\\services\\concurrency_manager.py",
+        "src\\services\\file_cache.py",
+        "src\\services\\flow_client.py",
+        "src\\services\\generation_handler.py",
+        "src\\services\\load_balancer.py",
+        "src\\services\\proxy_manager.py",
+        "src\\services\\token_manager.py",
+        "src\\services\\__init__.py",
+        "static\\login.html",
+        "static\\manage.html"
+      ],
+      "python": [
+        "main.py",
+        "scripts\\update_index.py",
+        "src\\main.py",
+        "src\\api\\admin.py",
+        "src\\api\\routes.py",
+        "src\\api\\__init__.py",
+        "src\\core\\auth.py",
+        "src\\core\\config.py",
+        "src\\core\\database.py",
+        "src\\core\\logger.py",
+        "src\\core\\models.py",
+        "src\\core\\__init__.py",
+        "src\\services\\concurrency_manager.py",
+        "src\\services\\file_cache.py",
+        "src\\services\\flow_client.py",
+        "src\\services\\generation_handler.py",
+        "src\\services\\load_balancer.py",
+        "src\\services\\proxy_manager.py",
+        "src\\services\\token_manager.py",
+        "src\\services\\__init__.py"
+      ],
+      "config": [
+        "docker-compose.proxy.yml",
+        "docker-compose.yml",
+        "PROJECT_INDEX.json",
+        ".beads\\config.yaml",
+        ".beads\\metadata.json",
+        ".claude\\settings.local.json",
+        ".serena\\project.yml",
+        "config\\setting.toml",
+        "config\\setting_warp.toml"
+      ],
+      "docs": [
+        "README.md",
+        ".beads\\README.md",
+        "docs\\README.md"
+      ]
+    }
+  },
+  "modules": {
+    "api": {
+      "path": "src/api/",
+      "files": {
+        "routes.py": "OpenAI-compatible endpoints",
+        "admin.py": "Admin panel endpoints"
+      }
+    },
+    "core": {
+      "path": "src/core/",
+      "files": {
+        "config.py": "Configuration management",
+        "database.py": "Database operations",
+        "auth.py": "Authentication logic",
+        "models.py": "Data models"
+      }
+    },
+    "services": {
+      "path": "src/services/",
+      "files": {
+        "flow_client.py": "Google Labs API client",
+        "token_manager.py": "Token lifecycle management",
+        "load_balancer.py": "Multi-token load balancing"
+      }
+    }
+  },
+  "supported_models": {
+    "image_generation": [
+      "gemini-2.5-flash-image-landscape",
+      "gemini-2.5-flash-image-portrait",
+      "gemini-3.0-pro-image-landscape",
+      "gemini-3.0-pro-image-portrait",
+      "imagen-4.0-generate-preview-landscape",
+      "imagen-4.0-generate-preview-portrait"
+    ],
+    "video_generation": {
+      "text_to_video": [
+        "veo_3_1_t2v_fast_portrait",
+        "veo_3_1_t2v_fast_landscape",
+        "veo_2_1_fast_d_15_t2v_portrait",
+        "veo_2_1_fast_d_15_t2v_landscape",
+        "veo_2_0_t2v_portrait",
+        "veo_2_0_t2v_landscape"
+      ],
+      "first_last_frame": [
+        "veo_3_1_i2v_s_fast_fl_portrait",
+        "veo_3_1_i2v_s_fast_fl_landscape",
+        "veo_2_1_fast_d_15_i2v_portrait",
+        "veo_2_1_fast_d_15_i2v_landscape",
+        "veo_2_0_i2v_portrait",
+        "veo_2_0_i2v_landscape"
+      ],
+      "multi_image": [
+        "veo_3_0_r2v_fast_portrait",
+        "veo_3_0_r2v_fast_landscape"
+      ]
+    }
+  },
+  "dependencies": {
+    "fastapi": "0.119.0",
+    "uvicorn": "0.32.1",
+    "pydantic": "2.10.4",
+    "aiosqlite": "0.20.0"
+  },
+  "statistics": {
+    "total_files": 49,
+    "python_files": 20,
+    "config_files": 9,
+    "doc_files": 3,
+    "directories": 14
+  },
+  "last_updated": "2025-12-10T02:28:15.781424"
+}

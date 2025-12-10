@@ -10,7 +10,7 @@ from ..core.config import config
 
 
 class FlowClient:
-    """VideoFX API客户端"""
+    """VideoFX API Client"""
 
     def __init__(self, proxy_manager):
         self.proxy_manager = proxy_manager
@@ -29,16 +29,16 @@ class FlowClient:
         use_at: bool = False,
         at_token: Optional[str] = None
     ) -> Dict[str, Any]:
-        """统一HTTP请求处理
+        """Unified HTTP request handler
 
         Args:
-            method: HTTP方法 (GET/POST)
-            url: 完整URL
-            headers: 请求头
-            json_data: JSON请求体
-            use_st: 是否使用ST认证 (Cookie方式)
+            method: HTTP method (GET/POST)
+            url: Full URL
+            headers: Request headers
+            json_data: JSON request body
+            use_st: Whether to use ST authentication (Cookie method)
             st_token: Session Token
-            use_at: 是否使用AT认证 (Bearer方式)
+            use_at: Whether to use AT authentication (Bearer method)
             at_token: Access Token
         """
         proxy_url = await self.proxy_manager.get_proxy_url()
@@ -46,15 +46,15 @@ class FlowClient:
         if headers is None:
             headers = {}
 
-        # ST认证 - 使用Cookie
+        # ST authentication - Using Cookie
         if use_st and st_token:
             headers["Cookie"] = f"__Secure-next-auth.session-token={st_token}"
 
-        # AT认证 - 使用Bearer
+        # AT authentication - Using Bearer
         if use_at and at_token:
             headers["authorization"] = f"Bearer {at_token}"
 
-        # 通用请求头
+        # Common request headers
         headers.update({
             "Content-Type": "application/json",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
@@ -119,10 +119,10 @@ class FlowClient:
 
             raise Exception(f"Flow API request failed: {error_msg}")
 
-    # ========== 认证相关 (使用ST) ==========
+    # ========== Authentication (Using ST) ==========
 
     async def st_to_at(self, st: str) -> dict:
-        """ST转AT
+        """Convert ST to AT
 
         Args:
             st: Session Token
@@ -143,14 +143,14 @@ class FlowClient:
         )
         return result
 
-    # ========== 项目管理 (使用ST) ==========
+    # ========== Project Management (using ST) ==========
 
     async def create_project(self, st: str, title: str) -> str:
-        """创建项目,返回project_id
+        """Create project, return project_id
 
         Args:
             st: Session Token
-            title: 项目标题
+            title: Project title
 
         Returns:
             project_id (UUID)
@@ -197,10 +197,10 @@ class FlowClient:
             st_token=st
         )
 
-    # ========== 余额查询 (使用AT) ==========
+    # ========== Balance Query (using AT) ==========
 
     async def get_credits(self, at: str) -> dict:
-        """查询余额
+        """Query balance
 
         Args:
             at: Access Token
@@ -622,14 +622,14 @@ class FlowClient:
 
         return result
 
-    # ========== 媒体删除 (使用ST) ==========
+    # ========== Media Deletion (using ST) ==========
 
     async def delete_media(self, st: str, media_names: List[str]):
         """删除媒体
 
         Args:
             st: Session Token
-            media_names: 媒体ID列表
+            media_names: List of media IDs
         """
         url = f"{self.labs_base_url}/trpc/media.deleteMedia"
         json_data = {
@@ -646,12 +646,12 @@ class FlowClient:
             st_token=st
         )
 
-    # ========== 辅助方法 ==========
+    # ========== Helper Methods ==========
 
     def _generate_session_id(self) -> str:
-        """生成sessionId: ;timestamp"""
+        """Generate sessionId: ;timestamp"""
         return f";{int(time.time() * 1000)}"
 
     def _generate_scene_id(self) -> str:
-        """生成sceneId: UUID"""
+        """Generate sceneId: UUID"""
         return str(uuid.uuid4())

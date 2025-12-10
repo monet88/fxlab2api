@@ -8,12 +8,12 @@ class Token(BaseModel):
     """Token model for Flow2API"""
     id: Optional[int] = None
 
-    # 认证信息 (核心)
+    # Authentication info (core)
     st: str  # Session Token (__Secure-next-auth.session-token)
-    at: Optional[str] = None  # Access Token (从ST转换而来)
-    at_expires: Optional[datetime] = None  # AT过期时间
+    at: Optional[str] = None  # Access Token (converted from ST)
+    at_expires: Optional[datetime] = None  # AT expiration time
 
-    # 基础信息
+    # Basic info
     email: str
     name: Optional[str] = ""
     remark: Optional[str] = None
@@ -22,30 +22,30 @@ class Token(BaseModel):
     last_used_at: Optional[datetime] = None
     use_count: int = 0
 
-    # VideoFX特有字段
-    credits: int = 0  # 剩余credits
+    # VideoFX specific fields
+    credits: int = 0  # Remaining credits
     user_paygate_tier: Optional[str] = None  # PAYGATE_TIER_ONE
 
-    # 项目管理
-    current_project_id: Optional[str] = None  # 当前使用的项目UUID
-    current_project_name: Optional[str] = None  # 项目名称
+    # Project management
+    current_project_id: Optional[str] = None  # Current project UUID
+    current_project_name: Optional[str] = None  # Project name
 
-    # 功能开关
+    # Feature toggles
     image_enabled: bool = True
     video_enabled: bool = True
 
-    # 并发限制
-    image_concurrency: int = -1  # -1表示无限制
-    video_concurrency: int = -1  # -1表示无限制
+    # Concurrency limits
+    image_concurrency: int = -1  # -1 means no limit
+    video_concurrency: int = -1  # -1 means no limit
 
 
 class Project(BaseModel):
     """Project model for VideoFX"""
     id: Optional[int] = None
-    project_id: str  # VideoFX项目UUID
-    token_id: int  # 关联的Token ID
-    project_name: str  # 项目名称
-    tool_name: str = "PINHOLE"  # 工具名称,固定为PINHOLE
+    project_id: str  # VideoFX project UUID
+    token_id: int  # Associated Token ID
+    project_name: str  # Project name
+    tool_name: str = "PINHOLE"  # Tool name, fixed as PINHOLE
     is_active: bool = True
     created_at: Optional[datetime] = None
 
@@ -59,12 +59,12 @@ class TokenStats(BaseModel):
     error_count: int = 0  # Historical total errors (never reset)
     last_success_at: Optional[datetime] = None
     last_error_at: Optional[datetime] = None
-    # 今日统计
+    # Today statistics
     today_image_count: int = 0
     today_video_count: int = 0
     today_error_count: int = 0
     today_date: Optional[str] = None
-    # 连续错误计数 (用于自动禁用判断)
+    # Consecutive error count (used for auto-disable determination)
     consecutive_error_count: int = 0
 
 

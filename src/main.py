@@ -102,7 +102,7 @@ generation_handler = GenerationHandler(
     load_balancer,
     db,
     concurrency_manager,
-    proxy_manager  # 添加 proxy_manager 参数
+    proxy_manager  # Add proxy_manager parameter
 )
 
 # Set dependencies

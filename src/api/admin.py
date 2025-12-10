@@ -37,7 +37,7 @@ class LoginRequest(BaseModel):
 
 class AddTokenRequest(BaseModel):
     st: str
-    project_id: Optional[str] = None  # 用户可选输入project_id
+    project_id: Optional[str] = None  # User can optionally input project_id
     project_name: Optional[str] = None
     remark: Optional[str] = None
     image_enabled: bool = True
@@ -47,8 +47,8 @@ class AddTokenRequest(BaseModel):
 
 
 class UpdateTokenRequest(BaseModel):
-    st: str  # Session Token (必填，用于刷新AT)
-    project_id: Optional[str] = None  # 用户可选输入project_id
+    st: str  # Session Token (required, used to refresh AT)
+    project_id: Optional[str] = None  # User can optionally input project_id
     project_name: Optional[str] = None
     remark: Optional[str] = None
     image_enabled: Optional[bool] = None
@@ -85,7 +85,7 @@ class UpdateAdminConfigRequest(BaseModel):
 
 
 class ST2ATRequest(BaseModel):
-    """ST转AT请求"""
+    """ST to AT request"""
     st: str
 
 
@@ -132,7 +132,7 @@ async def admin_login(request: LoginRequest):
 async def admin_logout(token: str = Depends(verify_admin_token)):
     """Admin logout - invalidate session token"""
     active_admin_tokens.discard(token)
-    return {"success": True, "message": "退出登录成功"}
+    return {"success": True, "message": "Logout successful"}
 
 
 @router.post("/api/admin/change-password")
@@ -145,7 +145,7 @@ async def change_password(
 
     # Verify old password
     if not AuthManager.verify_admin(admin_config.username, request.old_password):
-        raise HTTPException(status_code=400, detail="旧密码错误")
+        raise HTTPException(status_code=400, detail="Old password is incorrect")
 
     # Update password in database
     await db.update_admin_config(password=request.new_password)
@@ -156,7 +156,7 @@ async def change_password(
     # 🔑 Invalidate all admin session tokens (force re-login for security)
     active_admin_tokens.clear()
 
-    return {"success": True, "message": "密码修改成功,请重新登录"}
+    return {"success": True, "message": "Password changed successfully, please login again"}
 
 
 # ========== Token Management ==========
@@ -173,9 +173,9 @@ async def get_tokens(token: str = Depends(verify_admin_token)):
         result.append({
             "id": t.id,
             "st": t.st,  # Session Token for editing
-            "at": t.at,  # Access Token for editing (从ST转换而来)
-            "at_expires": t.at_expires.isoformat() if t.at_expires else None,  # 🆕 AT过期时间
-            "token": t.at,  # 兼容前端 token.token 的访问方式
+            "at": t.at,  # Access Token for editing (converted from ST)
+            "at_expires": t.at_expires.isoformat() if t.at_expires else None,  # 🆕 AT expiration time
+            "token": t.at,  # Compatible with frontend token.token access pattern
             "email": t.email,
             "name": t.name,
             "remark": t.remark,
@@ -183,10 +183,10 @@ async def get_tokens(token: str = Depends(verify_admin_token)):
             "created_at": t.created_at.isoformat() if t.created_at else None,
             "last_used_at": t.last_used_at.isoformat() if t.last_used_at else None,
             "use_count": t.use_count,
-            "credits": t.credits,  # 🆕 余额
+            "credits": t.credits,  # 🆕 Credits/Balance
             "user_paygate_tier": t.user_paygate_tier,
-            "current_project_id": t.current_project_id,  # 🆕 项目ID
-            "current_project_name": t.current_project_name,  # 🆕 项目名称
+            "current_project_id": t.current_project_id,  # 🆕 Project ID
+            "current_project_name": t.current_project_name,  # 🆕 Project Name
             "image_enabled": t.image_enabled,
             "video_enabled": t.video_enabled,
             "image_concurrency": t.image_concurrency,
@@ -196,7 +196,7 @@ async def get_tokens(token: str = Depends(verify_admin_token)):
             "error_count": stats.error_count if stats else 0
         })
 
-    return result  # 直接返回数组,兼容前端
+    return result  # Return array directly, compatible with frontend
 
 
 @router.post("/api/tokens")
@@ -208,7 +208,7 @@ async def add_token(
     try:
         new_token = await token_manager.add_token(
             st=request.st,
-            project_id=request.project_id,  # 🆕 支持用户指定project_id
+            project_id=request.project_id,  # 🆕 Support user-specified project_id
             project_name=request.project_name,
             remark=request.remark,
             image_enabled=request.image_enabled,
@@ -219,7 +219,7 @@ async def add_token(
 
         return {
             "success": True,
-            "message": "Token添加成功",
+            "message": "Token added successfully",
             "token": {
                 "id": new_token.id,
                 "email": new_token.email,
@@ -231,7 +231,7 @@ async def add_token(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"添加Token失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to add Token: {str(e)}")
 
 
 @router.put("/api/tokens/{token_id}")
@@ -240,14 +240,14 @@ async def update_token(
     request: UpdateTokenRequest,
     token: str = Depends(verify_admin_token)
 ):
-    """Update token - 使用ST自动刷新AT"""
+    """Update token - Automatically refresh AT using ST"""
     try:
-        # 先ST转AT
+        # First convert ST to AT
         result = await token_manager.flow_client.st_to_at(request.st)
         at = result["access_token"]
         expires = result.get("expires")
 
-        # 解析过期时间
+        # Parse expiration time
         from datetime import datetime
         at_expires = None
         if expires:
@@ -256,12 +256,12 @@ async def update_token(
             except:
                 pass
 
-        # 更新token (包含AT、ST、AT过期时间、project_id和project_name)
+        # Update token (including AT, ST, AT expiration time, project_id and project_name)
         await token_manager.update_token(
             token_id=token_id,
             st=request.st,
             at=at,
-            at_expires=at_expires,  # 🆕 更新AT过期时间
+            at_expires=at_expires,  # 🆕 Update AT expiration time
             project_id=request.project_id,
             project_name=request.project_name,
             remark=request.remark,
@@ -271,7 +271,7 @@ async def update_token(
             video_concurrency=request.video_concurrency
         )
 
-        return {"success": True, "message": "Token更新成功"}
+        return {"success": True, "message": "Token updated successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -284,7 +284,7 @@ async def delete_token(
     """Delete token"""
     try:
         await token_manager.delete_token(token_id)
-        return {"success": True, "message": "Token删除成功"}
+        return {"success": True, "message": "Token deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -296,7 +296,7 @@ async def enable_token(
 ):
     """Enable token"""
     await token_manager.enable_token(token_id)
-    return {"success": True, "message": "Token已启用"}
+    return {"success": True, "message": "Token enabled"}
 
 
 @router.post("/api/tokens/{token_id}/disable")
@@ -306,7 +306,7 @@ async def disable_token(
 ):
     """Disable token"""
     await token_manager.disable_token(token_id)
-    return {"success": True, "message": "Token已禁用"}
+    return {"success": True, "message": "Token disabled"}
 
 
 @router.post("/api/tokens/{token_id}/refresh-credits")
@@ -314,16 +314,16 @@ async def refresh_credits(
     token_id: int,
     token: str = Depends(verify_admin_token)
 ):
-    """刷新Token余额 🆕"""
+    """Refresh Token balance 🆕"""
     try:
         credits = await token_manager.refresh_credits(token_id)
         return {
             "success": True,
-            "message": "余额刷新成功",
+            "message": "Balance refreshed successfully",
             "credits": credits
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"刷新余额失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to refresh balance: {str(e)}")
 
 
 @router.post("/api/tokens/{token_id}/refresh-at")
@@ -331,17 +331,17 @@ async def refresh_at(
     token_id: int,
     token: str = Depends(verify_admin_token)
 ):
-    """手动刷新Token的AT (使用ST转换) 🆕"""
+    """Manually refresh Token's AT (using ST conversion) 🆕"""
     try:
-        # 调用token_manager的内部刷新方法
+        # Call token_manager's internal refresh method
         success = await token_manager._refresh_at(token_id)
 
         if success:
-            # 获取更新后的token信息
+            # Get updated token information
             updated_token = await token_manager.get_token(token_id)
             return {
                 "success": True,
-                "message": "AT刷新成功",
+                "message": "AT refreshed successfully",
                 "token": {
                     "id": updated_token.id,
                     "email": updated_token.email,
@@ -349,9 +349,9 @@ async def refresh_at(
                 }
             }
         else:
-            raise HTTPException(status_code=500, detail="AT刷新失败")
+            raise HTTPException(status_code=500, detail="AT refresh failed")
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"刷新AT失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to refresh AT: {str(e)}")
 
 
 @router.post("/api/tokens/st2at")
@@ -359,7 +359,7 @@ async def st_to_at(
     request: ST2ATRequest,
     token: str = Depends(verify_admin_token)
 ):
-    """Convert Session Token to Access Token (仅转换,不添加到数据库)"""
+    """Convert Session Token to Access Token (conversion only, not adding to database)"""
     try:
         result = await token_manager.flow_client.st_to_at(request.st)
         return {
@@ -405,7 +405,7 @@ async def update_proxy_config_alias(
 ):
     """Update proxy configuration (alias for frontend compatibility)"""
     await proxy_manager.update_proxy_config(request.proxy_enabled, request.proxy_url)
-    return {"success": True, "message": "代理配置更新成功"}
+    return {"success": True, "message": "Proxy configuration updated successfully"}
 
 
 @router.post("/api/config/proxy")
@@ -415,7 +415,7 @@ async def update_proxy_config(
 ):
     """Update proxy configuration"""
     await proxy_manager.update_proxy_config(request.proxy_enabled, request.proxy_url)
-    return {"success": True, "message": "代理配置更新成功"}
+    return {"success": True, "message": "Proxy configuration updated successfully"}
 
 
 @router.get("/api/config/generation")
@@ -442,7 +442,7 @@ async def update_generation_config(
     # 🔥 Hot reload: sync database config to memory
     await db.reload_config_to_memory()
 
-    return {"success": True, "message": "生成配置更新成功"}
+    return {"success": True, "message": "Generation configuration updated successfully"}
 
 
 # ========== System Info ==========
@@ -560,7 +560,7 @@ async def update_admin_config(
     # Update error_ban_threshold in database
     await db.update_admin_config(error_ban_threshold=request.error_ban_threshold)
 
-    return {"success": True, "message": "配置更新成功"}
+    return {"success": True, "message": "Configuration updated successfully"}
 
 
 @router.post("/api/admin/password")
@@ -584,7 +584,7 @@ async def update_api_key(
     # 🔥 Hot reload: sync database config to memory
     await db.reload_config_to_memory()
 
-    return {"success": True, "message": "API Key更新成功"}
+    return {"success": True, "message": "API Key updated successfully"}
 
 
 @router.post("/api/admin/debug")
@@ -623,18 +623,18 @@ async def update_generation_timeout(
     # 🔥 Hot reload: sync database config to memory
     await db.reload_config_to_memory()
 
-    return {"success": True, "message": "生成配置更新成功"}
+    return {"success": True, "message": "Generation configuration updated successfully"}
 
 
 # ========== AT Auto Refresh Config ==========
 
 @router.get("/api/token-refresh/config")
 async def get_token_refresh_config(token: str = Depends(verify_admin_token)):
-    """Get AT auto refresh configuration (默认启用)"""
+    """Get AT auto refresh configuration (enabled by default)"""
     return {
         "success": True,
         "config": {
-            "at_auto_refresh_enabled": True  # Flow2API默认启用AT自动刷新
+            "at_auto_refresh_enabled": True  # Flow2API enables AT auto refresh by default
         }
     }
 
@@ -643,10 +643,10 @@ async def get_token_refresh_config(token: str = Depends(verify_admin_token)):
 async def update_token_refresh_enabled(
     token: str = Depends(verify_admin_token)
 ):
-    """Update AT auto refresh enabled (Flow2API固定启用,此接口仅用于前端兼容)"""
+    """Update AT auto refresh enabled (Flow2API fixed enabled, this interface is only for frontend compatibility)"""
     return {
         "success": True,
-        "message": "Flow2API的AT自动刷新默认启用且无法关闭"
+        "message": "Flow2API AT auto refresh is enabled by default and cannot be disabled"
     }
 
 
@@ -683,7 +683,7 @@ async def update_cache_enabled(
     # 🔥 Hot reload: sync database config to memory
     await db.reload_config_to_memory()
 
-    return {"success": True, "message": f"缓存已{'启用' if enabled else '禁用'}"}
+    return {"success": True, "message": f"Cache {'enabled' if enabled else 'disabled'}"}
 
 
 @router.post("/api/cache/config")
@@ -701,7 +701,7 @@ async def update_cache_config_full(
     # 🔥 Hot reload: sync database config to memory
     await db.reload_config_to_memory()
 
-    return {"success": True, "message": "缓存配置更新成功"}
+    return {"success": True, "message": "Cache configuration updated successfully"}
 
 
 @router.post("/api/cache/base-url")
@@ -716,4 +716,4 @@ async def update_cache_base_url(
     # 🔥 Hot reload: sync database config to memory
     await db.reload_config_to_memory()
 
-    return {"success": True, "message": "缓存Base URL更新成功"}
+    return {"success": True, "message": "Cache Base URL updated successfully"}

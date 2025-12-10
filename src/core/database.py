@@ -219,7 +219,7 @@ class Database:
                     ("today_video_count", "INTEGER DEFAULT 0"),
                     ("today_error_count", "INTEGER DEFAULT 0"),
                     ("today_date", "DATE"),
-                    ("consecutive_error_count", "INTEGER DEFAULT 0"),  # 🆕 连续错误计数
+                    ("consecutive_error_count", "INTEGER DEFAULT 0"),  # 🆕 Consecutive error count
                 ]
 
                 for col_name, col_type in stats_columns_to_add:
@@ -241,7 +241,7 @@ class Database:
     async def init_db(self):
         """Initialize database tables"""
         async with aiosqlite.connect(self.db_path) as db:
-            # Tokens table (Flow2API版本)
+            # Tokens table (Flow2API version)
             await db.execute("""
                 CREATE TABLE IF NOT EXISTS tokens (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -266,7 +266,7 @@ class Database:
                 )
             """)
 
-            # Projects table (新增)
+            # Projects table (newly added)
             await db.execute("""
                 CREATE TABLE IF NOT EXISTS projects (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -410,7 +410,7 @@ class Database:
 
             if has_model and not has_operation:
                 # Old schema detected, need migration
-                print("🔄 检测到旧的request_logs表结构,开始迁移...")
+                print("🔄 Detected old request_logs table schema, starting migration...")
 
                 # Rename old table
                 await db.execute("ALTER TABLE request_logs RENAME TO request_logs_old")
@@ -450,9 +450,9 @@ class Database:
                 # Drop old table
                 await db.execute("DROP TABLE request_logs_old")
 
-                print("✅ request_logs表迁移完成")
+                print("✅ request_logs table migration completed")
         except Exception as e:
-            print(f"⚠️ request_logs表迁移失败: {e}")
+            print(f"⚠️ request_logs table migration failed: {e}")
             # Continue even if migration fails
 
     # Token operations
