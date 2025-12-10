@@ -227,6 +227,67 @@ curl -X POST "http://localhost:8000/v1/chat/completions" \
   }'
 ```
 
+## 🌐 Expose API to Internet (Cloudflare Tunnel)
+
+Share your API with others without deploying to a server. Uses Cloudflare's free tunnel service.
+
+### Install Cloudflared
+
+**Windows:**
+```bash
+winget install Cloudflare.cloudflared
+```
+
+**Linux/Mac:**
+```bash
+# Linux
+curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+sudo dpkg -i cloudflared.deb
+
+# Mac
+brew install cloudflared
+```
+
+### Start Tunnel
+
+```bash
+# Make sure Flow2API is running first
+python main.py
+
+# In another terminal, start the tunnel
+cloudflared tunnel --url http://localhost:8000
+```
+
+You'll get a public URL like:
+```
+https://xxx-xxx-xxx.trycloudflare.com
+```
+
+### Usage
+
+Share the tunnel URL with others. They can access your API:
+
+```bash
+# List models
+curl https://xxx-xxx-xxx.trycloudflare.com/v1/models \
+  -H "Authorization: Bearer YOUR_API_KEY"
+
+# Generate image
+curl -X POST https://xxx-xxx-xxx.trycloudflare.com/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gemini-2.5-flash-image-landscape",
+    "messages": [{"role": "user", "content": "A cute cat"}],
+    "stream": true
+  }'
+```
+
+> ⚠️ **Note:** 
+> - The tunnel URL changes every time you restart cloudflared
+> - Your computer must stay on for the API to work
+> - Access admin panel only via `http://localhost:8000`, not the tunnel URL
+
 ---
 
 ## 📄 License
