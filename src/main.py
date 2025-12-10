@@ -139,6 +139,15 @@ app.mount("/tmp", StaticFiles(directory=str(tmp_dir)), name="tmp")
 static_path = Path(__file__).parent.parent / "static"
 
 
+@app.get("/favicon.ico")
+async def favicon():
+    """Serve favicon"""
+    favicon_file = static_path / "favicon.ico"
+    if favicon_file.exists():
+        return FileResponse(str(favicon_file))
+    return HTMLResponse(content="", status_code=404)
+
+
 @app.get("/", response_class=HTMLResponse)
 async def index():
     """Redirect to login page"""
