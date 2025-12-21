@@ -2,18 +2,30 @@
 
 Welcome to the comprehensive documentation for Flow2API - a full-featured OpenAI-compatible API service that provides a unified interface for Google's VideoFX (Veo) platform.
 
-## 📚 Documentation Structure
+## Documentation Structure
 
 This documentation is organized into the following sections:
 
+### Core Documentation
 1. **[Project Overview](./PROJECT_OVERVIEW.md)** - Introduction to Flow2API, its purpose, and key features
 2. **[Architecture Documentation](./ARCHITECTURE.md)** - Detailed technical architecture and component design
 3. **[API Documentation](./API.md)** - Complete API reference with examples
+
+### Setup and Operations
 4. **[Setup and Installation Guide](./SETUP.md)** - Step-by-step installation instructions
 5. **[Configuration Guide](./CONFIGURATION.md)** - Detailed configuration options and examples
-6. **[Development Guide](./DEVELOPMENT.md)** - Guidelines for developers contributing to the project
-7. **[Deployment Guide](./DEPLOYMENT.md)** - Production deployment strategies and best practices
-8. **[Troubleshooting Guide](./TROUBLESHOOTING.md)** - Common issues and their solutions
+6. **[Deployment Guide](./deployment-guide.md)** - Production deployment strategies and best practices
+7. **[Troubleshooting Guide](./TROUBLESHOOTING.md)** - Common issues and their solutions
+
+### Development
+8. **[Development Guide](./DEVELOPMENT.md)** - Guidelines for developers contributing to the project
+9. **[Code Standards](./code-standards.md)** - Coding conventions and best practices
+10. **[Codebase Summary](./codebase-summary.md)** - Comprehensive codebase overview
+
+### Planning
+11. **[Project Overview PDR](./project-overview-pdr.md)** - Product Development Requirements
+12. **[System Architecture](./system-architecture.md)** - Detailed system architecture
+13. **[Project Roadmap](./project-roadmap.md)** - Development roadmap and future plans
 
 ## 🚀 Quick Start
 

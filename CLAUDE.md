@@ -13,7 +13,7 @@ Flow2API is a middleware service that provides an OpenAI-compatible API interfac
 ```bash
 # Docker deployment (recommended)
 docker-compose up -d                    # Standard mode
-docker-compose -f docker-compose.warp.yml up -d  # WARP proxy mode
+docker-compose -f docker-compose.proxy.yml up -d  # WARP proxy mode
 docker-compose logs -f                  # View logs
 
 # Local development

@@ -40,10 +40,10 @@ docker-compose logs -f
 
 ```bash
 # Start with WARP proxy
-docker-compose -f docker-compose.warp.yml up -d
+docker-compose -f docker-compose.proxy.yml up -d
 
 # View logs
-docker-compose -f docker-compose.warp.yml logs -f
+docker-compose -f docker-compose.proxy.yml logs -f
 ```
 
 ### Method 2: Local Deployment

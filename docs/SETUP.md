@@ -57,10 +57,10 @@ For environments requiring proxy support:
 
 ```bash
 # Start with WARP proxy
-docker-compose -f docker-compose.warp.yml up -d
+docker-compose -f docker-compose.proxy.yml up -d
 
 # View logs
-docker-compose -f docker-compose.warp.yml logs -f
+docker-compose -f docker-compose.proxy.yml logs -f
 ```
 
 #### Step 3: Verify Installation
@@ -289,7 +289,7 @@ docker-compose up -d
 docker-compose build --no-cache
 
 # Run with specific configuration
-docker-compose -f docker-compose.warp.yml up -d
+docker-compose -f docker-compose.proxy.yml up -d
 
 # Access container shell
 docker-compose exec flow2api bash

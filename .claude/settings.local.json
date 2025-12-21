@@ -1,3 +1,15 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(bd ready:*)",
+      "Bash(bd stats:*)",
+      "Skill(repomix)",
+      "Skill(repomix:*)",
+      "Bash(repomix:*)",
+      "Bash(git add:*)",
+      "Bash(Select-String -Pattern \"\\(api[_-]?key|token|password|secret|private[_-]?key|credential\\)\" -AllMatches)",
+      "Bash(Measure-Object)"
+    ]
+  },
   "outputStyle": "default"
 }
