@@ -86,7 +86,7 @@ python main.py
 
 ### First Access
 
-After the service starts, visit the admin panel: **http://localhost:8000**. Please change the password immediately after first login!
+After the service starts, visit the admin panel: **https://flow2api.azacc.store**. Please change the password immediately after first login!
 
 - **Username**: `admin`
 - **Password**: `admin`
@@ -143,7 +143,7 @@ After the service starts, visit the admin panel: **http://localhost:8000**. Plea
 ### Text-to-Image
 
 ```bash
-curl -X POST "http://localhost:8000/v1/chat/completions" \
+curl -X POST "https://flow2api.azacc.store/v1/chat/completions" \
   -H "Authorization: Bearer han1234" \
   -H "Content-Type: application/json" \
   -d '{
@@ -161,7 +161,7 @@ curl -X POST "http://localhost:8000/v1/chat/completions" \
 ### Image-to-Image
 
 ```bash
-curl -X POST "http://localhost:8000/v1/chat/completions" \
+curl -X POST "https://flow2api.azacc.store/v1/chat/completions" \
   -H "Authorization: Bearer han1234" \
   -H "Content-Type: application/json" \
   -d '{
@@ -190,7 +190,7 @@ curl -X POST "http://localhost:8000/v1/chat/completions" \
 ### Text-to-Video
 
 ```bash
-curl -X POST "http://localhost:8000/v1/chat/completions" \
+curl -X POST "https://flow2api.azacc.store/v1/chat/completions" \
   -H "Authorization: Bearer han1234" \
   -H "Content-Type: application/json" \
   -d '{
@@ -208,7 +208,7 @@ curl -X POST "http://localhost:8000/v1/chat/completions" \
 ### Generate Video with First and Last Frame
 
 ```bash
-curl -X POST "http://localhost:8000/v1/chat/completions" \
+curl -X POST "https://flow2api.azacc.store/v1/chat/completions" \
   -H "Authorization: Bearer han1234" \
   -H "Content-Type: application/json" \
   -d '{

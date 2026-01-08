@@ -6,18 +6,15 @@ Flow2API provides an OpenAI-compatible API interface for Google's VideoFX platfo
 
 ## 📡 Base URL
 
+**Production:**
+```
+https://flow2api.azacc.store
+```
+
 **Local Development:**
 ```
 http://localhost:8000
 ```
-
-**Production (replace with your deployed URL):**
-```
-https://your-domain.com
-```
-
-> **Note:** When using Cloudflare Tunnel, your URL will look like:
-> `https://xxx-xxx-xxx.trycloudflare.com`
 
 ## 🔑 Authentication
 
@@ -153,7 +150,7 @@ Generate an image from a text prompt.
 
 #### cURL
 ```bash
-curl -X POST "http://localhost:8000/v1/chat/completions" \
+curl -X POST "https://flow2api.azacc.store/v1/chat/completions" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -172,7 +169,7 @@ curl -X POST "http://localhost:8000/v1/chat/completions" \
 ```python
 import requests
 
-url = "http://localhost:8000/v1/chat/completions"
+url = "https://flow2api.azacc.store/v1/chat/completions"
 headers = {
     "Authorization": "Bearer YOUR_API_KEY",
     "Content-Type": "application/json"
@@ -196,7 +193,7 @@ for line in response.iter_lines():
 
 #### JavaScript (Node.js)
 ```javascript
-const response = await fetch("http://localhost:8000/v1/chat/completions", {
+const response = await fetch("https://flow2api.azacc.store/v1/chat/completions", {
   method: "POST",
   headers: {
     "Authorization": "Bearer YOUR_API_KEY",
@@ -232,7 +229,7 @@ Transform an existing image using a prompt.
 
 #### cURL
 ```bash
-curl -X POST "http://localhost:8000/v1/chat/completions" \
+curl -X POST "https://flow2api.azacc.store/v1/chat/completions" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -267,7 +264,7 @@ import base64
 with open("input_image.jpg", "rb") as f:
     image_base64 = base64.b64encode(f.read()).decode('utf-8')
 
-url = "http://localhost:8000/v1/chat/completions"
+url = "https://flow2api.azacc.store/v1/chat/completions"
 headers = {
     "Authorization": "Bearer YOUR_API_KEY",
     "Content-Type": "application/json"
@@ -308,7 +305,7 @@ Generate a video from text prompt only. No image input supported.
 
 #### cURL
 ```bash
-curl -X POST "http://localhost:8000/v1/chat/completions" \
+curl -X POST "https://flow2api.azacc.store/v1/chat/completions" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -327,7 +324,7 @@ curl -X POST "http://localhost:8000/v1/chat/completions" \
 ```python
 import requests
 
-url = "http://localhost:8000/v1/chat/completions"
+url = "https://flow2api.azacc.store/v1/chat/completions"
 headers = {
     "Authorization": "Bearer YOUR_API_KEY",
     "Content-Type": "application/json"
@@ -357,7 +354,7 @@ Use an image as the starting frame of the video.
 
 #### cURL
 ```bash
-curl -X POST "http://localhost:8000/v1/chat/completions" \
+curl -X POST "https://flow2api.azacc.store/v1/chat/completions" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -392,7 +389,7 @@ import base64
 with open("first_frame.jpg", "rb") as f:
     first_frame_base64 = base64.b64encode(f.read()).decode('utf-8')
 
-url = "http://localhost:8000/v1/chat/completions"
+url = "https://flow2api.azacc.store/v1/chat/completions"
 headers = {
     "Authorization": "Bearer YOUR_API_KEY",
     "Content-Type": "application/json"
@@ -433,7 +430,7 @@ Control both the starting and ending frames of the video.
 
 #### cURL
 ```bash
-curl -X POST "http://localhost:8000/v1/chat/completions" \
+curl -X POST "https://flow2api.azacc.store/v1/chat/completions" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -477,7 +474,7 @@ with open("day_city.jpg", "rb") as f:
 with open("night_city.jpg", "rb") as f:
     last_frame_base64 = base64.b64encode(f.read()).decode('utf-8')
 
-url = "http://localhost:8000/v1/chat/completions"
+url = "https://flow2api.azacc.store/v1/chat/completions"
 headers = {
     "Authorization": "Bearer YOUR_API_KEY",
     "Content-Type": "application/json"
@@ -524,7 +521,7 @@ Use multiple reference images to guide video generation (style, characters, obje
 
 #### cURL
 ```bash
-curl -X POST "http://localhost:8000/v1/chat/completions" \
+curl -X POST "https://flow2api.azacc.store/v1/chat/completions" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -580,7 +577,7 @@ for image_path in glob.glob("references/*.jpg"):
             }
         })
 
-url = "http://localhost:8000/v1/chat/completions"
+url = "https://flow2api.azacc.store/v1/chat/completions"
 headers = {
     "Authorization": "Bearer YOUR_API_KEY",
     "Content-Type": "application/json"
@@ -653,7 +650,7 @@ data: [DONE]
 import requests
 import json
 
-url = "http://localhost:8000/v1/chat/completions"
+url = "https://flow2api.azacc.store/v1/chat/completions"
 headers = {
     "Authorization": "Bearer YOUR_API_KEY",
     "Content-Type": "application/json"
@@ -954,7 +951,7 @@ class Flow2APIClient:
 # Usage Example
 if __name__ == "__main__":
     client = Flow2APIClient(
-        base_url="http://localhost:8000",
+        base_url="https://flow2api.azacc.store",
         api_key="YOUR_API_KEY"
     )
     
