@@ -89,7 +89,7 @@ class TokenManager:
             email = user_info.get("email", "")
             name = user_info.get("name", email.split("@")[0] if email else "")
 
-            # 解析过期时间
+            # Parse expiration time
             at_expires = None
             if expires:
                 try:
@@ -128,7 +128,7 @@ class TokenManager:
                 project_id = await self.flow_client.create_project(st, project_name)
                 debug_logger.log_info(f"[ADD_TOKEN] Created new project: {project_name} (ID: {project_id})")
             except Exception as e:
-                raise ValueError(f"创建项目失败: {str(e)}")
+                raise ValueError(f"Create project失败: {str(e)}")
 
         # Step 5: 创建Token对象
         token = Token(
@@ -149,7 +149,7 @@ class TokenManager:
             video_concurrency=video_concurrency
         )
 
-        # Step 6: 保存到数据库
+        # Step 6: Save to database
         token_id = await self.db.add_token(token)
         token.id = token_id
 
@@ -262,14 +262,14 @@ class TokenManager:
         time_until_expiry = at_expires_aware - now
 
         if time_until_expiry.total_seconds() < 3600:  # 1 hour (3600 seconds)
-            debug_logger.log_info(f"[AT_CHECK] Token {token_id}: AT即将过期 (剩余 {time_until_expiry.total_seconds():.0f} 秒),需要刷新")
+            debug_logger.log_info(f"[AT_CHECK] Token {token_id}: AT about to expire (剩余 {time_until_expiry.total_seconds():.0f} 秒),需要刷新")
             return await self._refresh_at(token_id)
 
         # AT有效
         return True
 
     async def _refresh_at(self, token_id: int) -> bool:
-        """内部方法: 刷新AT
+        """内部方法: Refresh AT
 
         Returns:
             True if refresh successful, False otherwise
@@ -280,14 +280,14 @@ class TokenManager:
                 return False
 
             try:
-                debug_logger.log_info(f"[AT_REFRESH] Token {token_id}: 开始刷新AT...")
+                debug_logger.log_info(f"[AT_REFRESH] Token {token_id}: 开始Refresh AT...")
 
                 # 使用ST转AT
                 result = await self.flow_client.st_to_at(token.st)
                 new_at = result["access_token"]
                 expires = result.get("expires")
 
-                # 解析过期时间
+                # Parse expiration time
                 new_at_expires = None
                 if expires:
                     try:
@@ -302,7 +302,7 @@ class TokenManager:
                     at_expires=new_at_expires
                 )
 
-                debug_logger.log_info(f"[AT_REFRESH] Token {token_id}: AT刷新成功")
+                debug_logger.log_info(f"[AT_REFRESH] Token {token_id}: ATRefresh successful")
                 debug_logger.log_info(f"  - 新过期时间: {new_at_expires}")
 
                 # 同时刷新credits
@@ -318,8 +318,8 @@ class TokenManager:
                 return True
 
             except Exception as e:
-                debug_logger.log_error(f"[AT_REFRESH] Token {token_id}: AT刷新失败 - {str(e)}")
-                # 刷新失败,禁用Token
+                debug_logger.log_error(f"[AT_REFRESH] Token {token_id}: ATRefresh failed - {str(e)}")
+                # Refresh failed,禁用Token
                 await self.disable_token(token_id)
                 return False
 
@@ -414,10 +414,10 @@ class TokenManager:
         )
 
     async def auto_unban_429_tokens(self):
-        """自动解禁因429被禁用的token
+        """Auto re-enable因429被禁用的token
 
         规则:
-        - 距离禁用时间12小时后自动解禁
+        - 距离禁用时间12小时后Auto re-enable
         - 仅解禁未过期的token
         - 仅解禁因429被禁用的token
         """

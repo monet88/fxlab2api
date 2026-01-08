@@ -30,13 +30,13 @@ class LoadBalancer:
         Returns:
             Selected token or None if no available tokens
         """
-        debug_logger.log_info(f"[LOAD_BALANCER] 开始选择Token (图片生成={for_image_generation}, 视频生成={for_video_generation}, 模型={model})")
+        debug_logger.log_info(f"[LOAD_BALANCER] Starting token selection (image_gen={for_image_generation}, video_gen={for_video_generation}, model={model})")
 
         active_tokens = await self.token_manager.get_active_tokens()
-        debug_logger.log_info(f"[LOAD_BALANCER] 获取到 {len(active_tokens)} 个活跃Token")
+        debug_logger.log_info(f"[LOAD_BALANCER] Retrieved {len(active_tokens)} active tokens")
 
         if not active_tokens:
-            debug_logger.log_info(f"[LOAD_BALANCER] ❌ 没有活跃的Token")
+            debug_logger.log_info(f"[LOAD_BALANCER] ❌ No active tokens available")
             return None
 
         # Filter tokens based on generation type
@@ -52,7 +52,7 @@ class LoadBalancer:
             # Filter for image generation
             if for_image_generation:
                 if not token.image_enabled:
-                    filtered_reasons[token.id] = "图片生成已禁用"
+                    filtered_reasons[token.id] = "image_gen已禁用"
                     continue
 
                 # Check concurrency limit
@@ -63,7 +63,7 @@ class LoadBalancer:
             # Filter for video generation
             if for_video_generation:
                 if not token.video_enabled:
-                    filtered_reasons[token.id] = "视频生成已禁用"
+                    filtered_reasons[token.id] = "video_gen已禁用"
                     continue
 
                 # Check concurrency limit
@@ -80,7 +80,7 @@ class LoadBalancer:
                 debug_logger.log_info(f"[LOAD_BALANCER]   - Token {token_id}: {reason}")
 
         if not available_tokens:
-            debug_logger.log_info(f"[LOAD_BALANCER] ❌ 没有可用的Token (图片生成={for_image_generation}, 视频生成={for_video_generation})")
+            debug_logger.log_info(f"[LOAD_BALANCER] ❌ 没有可用的Token (image_gen={for_image_generation}, video_gen={for_video_generation})")
             return None
 
         # Random selection
